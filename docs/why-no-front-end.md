@@ -1,24 +1,9 @@
-# Why there is no front end
+# The database is the product
 
-IBM watsonx.governance is a database with a subscription. The tables underneath it are ordinary: a few entities, a few relationships, a handful of workflows you repeat every week. What you pay for is the layer on top that lets people who do not write SQL get at those tables. Screens, filters, dashboards, forms.
+The operator asks for the week's reviews, evidence due and unresolved actions. A coding agent follows a checked command recipe and reads the database. The same records produce branded HTML review packs and read-only dashboards.
 
-That layer used to be the whole product, because talking to a database was hard. It is not hard any more. Open this folder in Claude Code, describe what you want, and it writes the query, runs it, and explains the answer. Ask a question the dashboard never had a chart for and you still get an answer.
+A screen gives a team forms, drag and drop, mobile capture, offline work, permissions and easy file attachment. This base does not provide those. It also does not host models, inspect their outputs, detect drift, run evaluations or enforce decisions in a production service. Evidence references are recorded links, not stored documents.
 
-## What you gain
+Claude Code, Codex, OpenCode or Cursor can operate the same database. No model API is needed to run the CLI. Keep one process at a time on local PGlite. Shared Postgres needs authenticated access, access controls, backups and an operating review; a database connection alone is not a secure team service.
 
-- **Better answers.** A dashboard shows what the vendor decided to chart. Here you ask your own question, in your own words, and get it answered against your own data.
-- **No seats.** Everyone who needs to look can look. The bill does not grow with headcount.
-- **Your data in your Postgres.** Plain tables. Back them up, query them from anything, leave any time. There is no export step because there is nothing to leave.
-- **A process that matches you.** When your way of working changes, you add a command. You do not wait for a feature request to clear.
-
-## What you give up
-
-- **A visual board.** Stages are a table you ask about, not cards you drag.
-- **A phone app.** It runs where Claude Code runs.
-- **A vendor help desk.** This is open source. Enterprise DNA supports the installed version for businesses that want someone to call.
-
-## Who this fits
-
-Small teams who already use Claude Code, or who would rather learn to ask than learn another interface. If your team needs a screen to look at all day, keep IBM watsonx.governance. If you need the answers more than the screens, this is cheaper, faster and yours.
-
-Installed and run for you: https://enterprisedna.co/omni/instead-of/ibm-watsonx-governance
+Omni by Enterprise DNA supplies the custom fields, review rules, connections and web front end a business wants, then runs its agreed system. One setup fee, then a retainer.

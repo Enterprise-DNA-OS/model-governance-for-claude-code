@@ -1,115 +1,95 @@
-<h1 align="center">Model Governance for Claude Code</h1>
+# Model Governance for Claude Code
 
-<p align="center">
-  <strong>The open-source model governance desk that is just a database and Claude Code.</strong>
-</p>
+Know which models have an owner, which review is overdue and which approval rests on expired evidence. An owned database for model registers, versions, assessment decisions and remediation work. Built by Enterprise DNA.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free, MIT. Install the database and command recipes. | Your fields, review policy, evidence types, export mapping and a web front end if wanted. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your IBM watsonx.governance data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=ibm-watsonx-governance">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/ibm-watsonx-governance?utm_source=github&utm_medium=readme&utm_campaign=ibm-watsonx-governance">How it works</a></td>
-  </tr>
-</table>
+[Get your version built](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_campaign=ibm-watsonx-governance)
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-ibm-watsonx-governance">Instead of IBM watsonx.governance</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+## Start with the weekly work
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
+Review the inventory, assign owners, check evidence expiry, resolve remediation actions and prepare the review meeting. Decisions attach to a specific model version. Approval requires evidence valid through its expiry and no unresolved high-severity action. Adding a new version resets its assessment status. Records marked operating are checked again when evidence or dates lapse.
 
----
-
-## What is this
-
-Model Governance for Claude Code does the job you pay IBM watsonx.governance for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the IBM watsonx.governance dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays IBM watsonx.governance per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=ibm-watsonx-governance).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+IBM's [pricing page](https://www.ibm.com/products/watsonx-governance/pricing) lists Risk & Compliance Advanced from US$6,450 monthly, or US$77,400 over twelve months, checked 28 October 2026. Prices are indicative, vary by country and exclude taxes. This desk covers the review records; it is not a replacement for IBM's model evaluation or monitoring services.
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or newer. Claude Code, Codex, OpenCode or Cursor. No paid model API required by the CLI.
 
 ```bash
-git clone https://github.com/Enterprise-DNA-OS/model-governance-for-claude-code.git
-cd model-governance-for-claude-code
 npm install
 npm run demo
+node scripts/governance.mjs review-queue
+node scripts/governance.mjs compliance
+node scripts/governance.mjs insights
+npm run view
+npm run docs
+npm test
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+The demo is fictional, with missing owners, overdue reviews and expired evidence. Set a fresh DATA_DIR and run npm run migrate without seeding for real work. DATABASE_URL selects a dedicated Postgres database; otherwise PGlite lives in .data/db. One local process at a time.
 
-### Use it with your own Postgres or Supabase
+## Commands
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+Run node scripts/governance.mjs help for the complete option list. All 27 CLI commands support --json. Required options are marked ! in help. Named options use --name=value; selectors are positional. Case-insensitive exact codes and names, or partial identifiers, find records. Ambiguous selectors list candidates and exit 1.
 
-## The commands
+Read: help, register, versions, review-queue, evidence-due, actions-due, attention, compliance, insights, show, history.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+Write: add, add-version, open-review, attach-evidence, decide, add-action, close-action, set-owner, schedule-review, set-status, log, import.
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+Handover: export, weekly-review, draft-review, draft-action. Drafts never send.
 
-## Instead of IBM watsonx.governance
+Each has a matching slash recipe. /customise changes a rule or field through a migration and tests. /new-view adds a read-only view. The operating label records a human decision; it never starts or stops a running model.
 
-<!-- TODO(author): how to bring data across from IBM watsonx.governance; link docs/replace-ibm-watsonx-governance.md -->
+## Bring your register
 
-## Architecture
-
-```
-model-governance-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
+```bash
+node scripts/governance.mjs import ibm-watsonx-governance examples/ibm-use-cases.csv --source=demo-console --map=examples/column-map.json --actor="Register steward" --dry-run
+node scripts/governance.mjs export --out=exports/governance.json
 ```
 
-## Built for coding agents
+The fixture is synthetic. Map the exported headers once, preview, then remove --dry-run. Imported rows keep every raw field but start unassessed. Identical repeat imports skip; changed rows require reconciliation. Invalid batches roll back in full. [Switch guide](docs/replace-ibm-watsonx-governance.md).
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## Ten questions to ask
 
-## Contributing
+The insights command answers these from current records. These are custom joins over your policy and evidence, not a claim that IBM cannot be configured to answer them.
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+1. Which operating models have no current approval?
+2. Which owners have both an overdue review and overdue actions?
+3. Which suppliers have unassessed use cases?
+4. Which departments have no accountable owner recorded?
+5. Which approvals depend on evidence expiring within 30 days?
+6. Which current versions have never had a review?
+7. Which high-severity actions are overdue and who owns them?
+8. Which imported use cases still need assessment?
+9. Which retired systems still have unresolved actions?
+10. Which planned reviews arrive before their evidence expires?
 
-## Want it installed and run for you?
+## Your first hour: ten things to ask for
 
-Enterprise DNA installs Model Governance for Claude Code for your business, migrates your IBM watsonx.governance data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+1. Put our business name and colours in brand.json.
+2. Add our use-case register.
+3. Assign accountable owners.
+4. Record the model version currently in use.
+5. Set the next review date for each owner.
+6. Map a small exported sample and preview it.
+7. Set our impact and likelihood thresholds.
+8. Record our validation, privacy and oversight evidence.
+9. Render a review brief and remediation plan.
+10. Add our next recurring question with /new-view.
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=ibm-watsonx-governance)
-- Read more: [enterprisedna.co/omni/instead-of/ibm-watsonx-governance](https://enterprisedna.co/omni/instead-of/ibm-watsonx-governance?utm_source=github&utm_medium=readme&utm_campaign=ibm-watsonx-governance)
+## Documents and views
 
-## License
+Three dashboards cover reviews and actions, evidence and readiness, and the register. Three document types produce model cards, assessment/evidence records and remediation plans. brand.json controls logo, business name and colours. Generated files stay local and are read-only reports. Drafts live under drafts/.
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+## Rules and boundaries
+
+[Compliance notes](docs/compliance.md) separate voluntary NIST references from the demo's local policy. No legal certification, automated risk determination or production enforcement. The reviewer label differs from the recorded owner but is not authentication. The operator checks evidence references and owns every decision.
+
+[Why no front end](docs/why-no-front-end.md). No mobile app, collaboration UI, electronic signatures, automatic discovery, model evaluation, drift monitoring, attachment hosting or vendor connection. Enterprise DNA scopes those into a custom version when needed.
+
+Shared use requires secured hosting, authenticated roles, access controls and tested backups. Public database roles have no access by default. History records application actions but is not tamper-proof against the database owner. Protect exports and drafts; they contain business records. File permissions are restricted where supported; secure Windows folders separately. [Verification](docs/verification.md).
+
+MIT. Built by Enterprise DNA.

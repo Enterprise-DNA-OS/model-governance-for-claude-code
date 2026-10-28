@@ -1,11 +1,57 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "model-card",
+    "title": "Model governance card",
+    "for_each": "SELECT id,code FROM systems ORDER BY code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Intended use and owner",
+        "layout": "record",
+        "sql": "SELECT code,name,purpose,owner,department,vendor,risk_tier,status,next_review FROM systems WHERE id=$1"
+      },
+      {
+        "title": "Version record",
+        "sql": "SELECT code,model_ref,current,notes FROM versions WHERE system_id=$1 ORDER BY created_at,id"
+      },
+      {
+        "title": "Decisions",
+        "sql": "SELECT state,impact,likelihood,reviewer,decided_on,valid_until,rationale FROM assessments WHERE system_id=$1 ORDER BY created_at,id"
+      }
+    ]
+  },
+  {
+    "name": "assessment-record",
+    "title": "Assessment and evidence record",
+    "for_each": "SELECT a.id,s.code||'-'||a.id::text AS code FROM assessments a JOIN systems s ON s.id=a.system_id ORDER BY a.created_at,a.id",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Decision",
+        "layout": "record",
+        "sql": "SELECT state,impact,likelihood,reviewer,decided_on,valid_until,rationale FROM assessments WHERE id=$1"
+      },
+      {
+        "title": "Evidence supplied",
+        "sql": "SELECT kind,reference,summary,checked_on,valid_until FROM evidence WHERE assessment_id=$1 ORDER BY kind"
+      }
+    ]
+  },
+  {
+    "name": "remediation-plan",
+    "title": "Remediation plan",
+    "for_each": "SELECT id,code FROM systems ORDER BY code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Owner and scope",
+        "layout": "record",
+        "sql": "SELECT code,name,owner,purpose FROM systems WHERE id=$1"
+      },
+      {
+        "title": "Actions and resolution",
+        "sql": "SELECT title,owner,severity,due_on,status,resolution,closed_on FROM actions WHERE system_id=$1 ORDER BY due_on,id"
+      }
     ]
   }
 ]

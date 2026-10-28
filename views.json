@@ -1,13 +1,40 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Model Governance for Claude Code: what needs attention, rendered by npm run view",
+    "title": "This week: model reviews",
+    "subtitle": "Local governance records. No live model telemetry.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Reviews to arrange",
+        "sql": "SELECT code,name,owner,next_review,reason FROM v_review_queue ORDER BY next_review NULLS FIRST,code"
+      },
+      {
+        "title": "Remediation due",
+        "sql": "SELECT code,title,owner,severity,due_on FROM v_actions_due ORDER BY due_on,code"
+      }
+    ]
+  },
+  {
+    "name": "evidence",
+    "title": "Evidence and readiness",
+    "sections": [
+      {
+        "title": "Evidence expiry",
+        "sql": "SELECT code,kind,valid_until,days_left,state FROM v_evidence_due ORDER BY valid_until,code"
+      },
+      {
+        "title": "Current record checks",
+        "sql": "SELECT code,status,has_owner,review_current,approval_current,no_high_actions FROM v_readiness ORDER BY code"
+      }
+    ]
+  },
+  {
+    "name": "register",
+    "title": "Model and use-case register",
+    "sections": [
+      {
+        "title": "Accountability and current version",
+        "sql": "SELECT code,name,owner,department,risk_tier,status,version,next_review FROM v_register ORDER BY code"
       }
     ]
   }

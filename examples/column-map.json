@@ -1,0 +1,9 @@
+{
+  "external_id": "Resource ID",
+  "code": "Name",
+  "name": "Name",
+  "purpose": "Description",
+  "owner": "Owner",
+  "department": "Business Entity",
+  "vendor": "Vendor"
+}

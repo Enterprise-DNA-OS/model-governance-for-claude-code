@@ -1,43 +1,53 @@
 # Model Governance for Claude Code: operating instructions
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+This desk serves the accountable model owner, register steward and independent reviewer. It records internal governance decisions and evidence, never controls a deployed model. Demo business: Harbour Model Review. Replace its branding and local review policy before real use.
 
-## Who this is for
+## Working rules
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+Read the CLI and affected history before acting. Every answer comes from current records. Never invent owners, evidence, dates or approvals. Ask when a selector is ambiguous. Every mutation requires an actor label; it is not authenticated identity. No sends, external calls, deletion, regulatory filings or deployment. Drafts stay local.
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+## One route for each job
 
-## How to work
-
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
-
-## Routing table: one right way for each recurring job
-
-| When the operator asks for... | Use this |
+| Job | Recipe |
 |---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+| Read available commands and required options | /help |
+| Review the model and use-case register | /register |
+| Review recorded model versions | /versions |
+| Prepare the review queue | /review-queue |
+| Check evidence expiry | /evidence-due |
+| Chase remediation deadlines | /actions-due |
+| Find records needing attention | /attention |
+| Check local governance records against documented rules | /compliance |
+| Answer ten combined governance questions | /insights |
+| Read a complete use-case record | /show |
+| Read the recorded change history | /history |
+| Register a model use case | /add |
+| Record a new current version | /add-version |
+| Open a review of the current version | /open-review |
+| Attach a checked evidence reference | /attach-evidence |
+| Record an independent reviewer decision | /decide |
+| Assign a remediation action | /add-action |
+| Record a remediation resolution | /close-action |
+| Assign the accountable owner | /set-owner |
+| Set the next review date | /schedule-review |
+| Record a lifecycle decision | /set-status |
+| Record a meeting or operating note | /log |
+| Preview and import an IBM inventory export | /import |
+| Export all domain records | /export |
+| Prepare the weekly review draft | /weekly-review |
+| Draft a model review brief | /draft-review |
+| Draft an action follow-up | /draft-action |
+| Change fields or policy | /customise |
+| Add a read-only report | /new-view |
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
+## Files
 
-## Hard rules
+scripts/governance.mjs is the one CLI. supabase/migrations holds ordered migrations. scripts/lib/db.mjs chooses a dedicated Postgres connection or local PGlite. Commands live in .claude/commands. docs/compliance.md owns the source citations and demo policy. docs/replace-ibm-watsonx-governance.md owns the import promise and limits. Read README.md for setup.
 
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
+## Record changes
 
-## Where things live
+Run help for exact arguments. Read-only reports use repeatable snapshots. Writes are transactional and append history. Model versions and final assessments stay in history; a new review creates a new assessment. Setting operating records a local decision only. Use one local PGlite process at a time.
 
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off IBM watsonx.governance.
+Run npm test and npm run demo after changes. Keep AGENTS.md beside this file for every runtime. Add fields with a new migration; never edit an already-applied migration. Add no model API or secret. Keep exports private.
 
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/ibm-watsonx-governance
+Built and operated through Omni by Enterprise DNA. One setup fee, then a retainer. https://enterprisedna.co/omni/instead-of/ibm-watsonx-governance
